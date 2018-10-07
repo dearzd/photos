@@ -1,0 +1,106 @@
+#album-detail {
+  /*padding: 4px;*/
+  transition: opacity ease-out 0.4s;
+}
+
+.edit-album-name {
+  display: inline-block;
+  padding: 0 12px;
+  margin-right: -40px;
+}
+
+.edit-album-name .edit-icon {
+  vertical-align: text-top;
+}
+
+.edit-album-name:hover svg { /* todo, not user svg */
+  fill: #000;
+}
+
+.album-photos {
+  margin: 0 -6px; /* minus every line first and last photo's margin */
+}
+
+/* photo view */
+.photo-view {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 6px 12px;
+  overflow: hidden;
+}
+
+.photo-view.selected {
+  outline: 3px solid var(--themeColor);
+}
+
+.photo-view-bg {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center center;
+  transition: transform ease-out 0.4s;
+}
+
+.photo-view-bg:hover {
+  transform: scale(1.06);
+}
+
+.img-checkbox {
+  position: absolute;
+  right: 0;
+  top: 0;
+  display: none;
+}
+
+.photo-view:hover .img-checkbox,
+.select-mode .img-checkbox {
+  display: block;
+}
+
+/* max view */
+.photo-max-view {
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.photo-max-view img {
+  max-width: calc(100% - 48px);
+  max-height: calc(100% - 48px);
+}
+
+.max-view-btn {
+  position: absolute;
+  top: 0;
+  opacity: 0.2;
+  width: 160px;
+  transition: opacity linear 0.2s, background-color linear 0.2s;
+}
+
+.max-view-btn:hover {
+  opacity: 1;
+}
+
+.nav-left {
+  left: 0;
+  height: 100%;
+}
+
+.nav-right {
+  right: 0;
+  height: 100%;
+}
+
+.nav-left {
+  background: linear-gradient(to left, rgba(0, 0, 0, 0.025), rgba(0, 0, 0, 0.6));
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.05);
+}
+
+.nav-right {
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.025), rgba(0, 0, 0, 0.6));
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.05);
+}
+
+.close-max-view {
+  right: 0;
+  height: 100px;
+}

@@ -1,0 +1,61 @@
+.dialog {
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.alert {
+
+}
+
+.confirm {
+
+}
+
+.prompt {
+
+}
+
+.link .dialog-body {
+  width: 360px;
+}
+
+.link .dialog-content {
+  min-height: 0;
+}
+
+.link textarea {
+  width: 100%;
+  min-height: 128px;
+  margin-bottom: 12px;
+  padding: 0.5em 0.8em;
+  line-height: 1.5;
+  border: 1px solid #ccc;
+}
+
+.dialog-body {
+  position: relative;
+  width: 280px;
+  padding: 24px;
+  border: 1px solid var(--themeColor);
+  background: white;
+}
+
+.dialog-content {
+  min-height: 86px;
+  margin-bottom: 12px;
+}
+
+h2.dialog-message {
+  margin-top: 0;
+}
+
+.dialog-buttons {
+  text-align: right;
+}
+
+.dialog-btn {
+  width: calc((100% - 5px) / 2)
+}
+
+.dialog-btn:last-child {
+  margin-left: 5px;
+}

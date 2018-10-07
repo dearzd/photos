@@ -1,0 +1,205 @@
+:root {
+  --themeColor: #0078D7;
+  --normalFontSize: 14px;
+  --smallFontSize: 12px;
+  --titleFontSize: 28px;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: arial, sans-serif;
+  font-size: var(--normalFontSize);
+  line-height: 1.4;
+  color: #333;
+}
+
+a {
+  text-decoration: none;
+  color: #333;
+}
+
+input, button, textarea {
+  box-sizing: border-box;
+  border: none;
+  background: none;
+  outline: none;
+  margin: 0;
+  padding: 0;
+  font: 14px arial, sans-serif;
+}
+
+input[type=text],
+input[type=password] {
+  width: 100%;
+  height: 32px;
+  padding: 0 0.5em;
+  background: #fff;
+  border: 1px solid #ccc;
+  -webkit-appearance: none;
+}
+
+textarea {
+  resize: none;
+}
+
+h1 {
+  font-size: var(--titleFontSize);
+  font-weight: normal;
+  line-height: 3;
+}
+
+h2 {
+  font-weight: normal;
+}
+
+img {
+  max-width: 100%;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+.oh {
+  overflow: hidden;
+}
+
+/*.sm {
+  margin: 6px;
+}
+
+.mm {
+  margin: 12px;
+}
+
+.lm {
+  margin: 24px;
+}*/
+
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.icon {
+  vertical-align: text-bottom;
+}
+
+.middle {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.page-title {
+  margin: 0;
+  padding: 16px;
+  text-align: center;
+}
+
+.fixed-wrap {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+}
+
+/* button */
+.btn {
+  box-sizing: border-box;
+  display: inline-block;
+  vertical-align: middle;
+  min-width: 124px;
+  height: 32px;
+  padding: 0 12px;
+  background: #ccc;
+}
+
+.btn-file > label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  margin: 0 -12px;
+  padding: 0 12px;
+}
+
+.btn:hover,
+.btn:focus {
+  border: 2px solid black;
+  padding: 0 10px;
+}
+
+.btn:active {
+  border: none;
+  background: darkgray;
+}
+
+.btn-text {
+  margin-left: 5px;
+}
+
+/* toggle */
+.toggle {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+  width: 28px;
+  height: 12px;
+  border-radius: 6px;
+  background: #ccc;
+}
+
+.toggle-circle {
+  position: absolute;
+  left: -4px;
+  top: -3px;
+  width: 16px;
+  height: 16px;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #000;
+  transition: left linear 0.15s;
+}
+
+.toggle.open {
+  background: var(--themeColor);
+}
+
+.toggle.open .toggle-circle {
+  left: calc(100% - 12px);
+  background: var(--themeColor);
+  border-color: var(--themeColor);
+}
+
+/* main */
+.main {
+  margin: 48px 96px;
+}
+
+/* responsive */
+@media screen and (max-width: 1024px) {
+  .main {
+    margin-left: 48px;
+    margin-right: 48px;
+  }
+}
+
+@media screen and (max-width: 512px) {
+  .main {
+    margin-left: 24px;
+    margin-right: 24px;
+  }
+}

@@ -1,0 +1,11 @@
+# ignore idea files
+.idea/
+
+# ignore install node modules
+node_modules/
+
+# ignore database file
+server/db.json
+
+# ignore build files
+public/
