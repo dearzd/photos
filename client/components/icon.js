@@ -1,24 +1,54 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 // import svg icon
-importAll(require.context('resources/', false, /\.svg$/));
+/*importAll(require.context('resources/', false, /\.svg$/));
 
 function importAll(r) {
   r.keys().forEach(r);
-}
+}*/
 
 class Icon extends Component {
   render() {
     const { name, size, className, color } = this.props;
+
+    // read svg from file
+    let svgStr = require('resources/' + name + '.svg');
+
+    if (!svgStr) {
+      return null;
+    }
+
+    // find svg child html
+    let startMatch = /<svg(\s|\S)*?>/.exec(svgStr);
+    let endMatch = /<\/svg>/.exec(svgStr);
+    let svgChildren = svgStr.substr(startMatch.index + startMatch[0].length, endMatch.index);
+
+    // find svg viewBox attribute
+    let viewBoxMatch = /viewBox="((\d|\D)*?)"/.exec(startMatch[0]);
+    let viewBox = viewBoxMatch && viewBoxMatch[1];
+
+    // init and external classNames
     let classNames = ['icon'];
     if (className) {
       classNames.push(className);
     }
+
     return (
+      <svg
+        viewBox={viewBox}
+        width={size}
+        height={size}
+        className={classNames.join(' ')}
+        fill={color}
+        dangerouslySetInnerHTML={{__html: svgChildren}}
+      />
+    );
+
+    /*return (
       <svg width={size} height={size} className={classNames.join(' ')} fill={color}>
         <use xlinkHref={'#symbol-' + name} />
       </svg>
-    );
+    );*/
   }
 }
 

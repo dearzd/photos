@@ -32,11 +32,35 @@ module.exports = {
       {
         test: /\.svg$/,
         include: paths.appResources,
+        use: [
+          {
+            //loader: 'raw-loader'
+            loader: path.resolve(path.resolve(paths.appClient, 'utils', 'testLoader.js'))
+          },
+          {
+            loader: 'svgo-loader',
+            options: {
+              plugins: [
+                {removeTitle: true},
+                {removeStyleElement: true},
+                {removeAttrs: {attrs: '(stroke|fill|class)'}},
+                {removeDimensions: true},
+                {removeUselessDefs: true},
+                {removeViewBox: false},
+                {convertPathData: true}
+              ]
+            }
+          }
+        ]
+      },
+      /*{
+        test: /\.svg$/,
+        include: paths.appResources,
         loader: 'svg-sprite-loader',
         options: {
           symbolId: 'symbol-[name]'
         }
-      },
+      },*/
       {
         test: /\.(png|jpg|gif)$/i,
         use: [
