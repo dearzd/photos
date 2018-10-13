@@ -17,13 +17,13 @@ function build() {
 
     if (stats.hasErrors()) {
       const messages = formatWebpackMessages(stats.toJson({}, true));
-      throw new Error(messages.errors.join('\n\n'))
+      throw new Error(messages.errors.join('\n\n'));
     }
 
     // treat warning error
     if (stats.hasWarnings()) {
       const messages = formatWebpackMessages(stats.toJson({}, true));
-      throw new Error(messages.warnings.join('\n\n'))
+      throw new Error(messages.warnings.join('\n\n'));
     }
   });
 }

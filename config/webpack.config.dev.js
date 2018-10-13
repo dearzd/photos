@@ -77,7 +77,7 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: paths.appHtml,
-      favicon: path.resolve(paths.appResources, 'favicon.ico')
+      favicon: path.resolve(paths.appResources, 'favicon.png')
     })
   ],
   devServer: {

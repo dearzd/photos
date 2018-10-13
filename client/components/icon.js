@@ -1,18 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-// import svg icon
-/*importAll(require.context('resources/', false, /\.svg$/));
-
-function importAll(r) {
-  r.keys().forEach(r);
-}*/
 
 class Icon extends Component {
   render() {
     const { name, size, className, color } = this.props;
 
     // read svg from file
-    let svgStr = require('resources/' + name + '.svg');
+    let svgStr = require('resources/icons/' + name + '.svg');
 
     if (!svgStr) {
       return null;
@@ -43,12 +37,6 @@ class Icon extends Component {
         dangerouslySetInnerHTML={{__html: svgChildren}}
       />
     );
-
-    /*return (
-      <svg width={size} height={size} className={classNames.join(' ')} fill={color}>
-        <use xlinkHref={'#symbol-' + name} />
-      </svg>
-    );*/
   }
 }
 
