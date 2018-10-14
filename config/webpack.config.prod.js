@@ -36,10 +36,25 @@ module.exports = {
       {
         test: /\.svg$/,
         include: paths.appResources,
-        loader: 'svg-sprite-loader',
-        options: {
-          symbolId: 'symbol-[name]'
-        }
+        use: [
+          {
+            loader: 'raw-loader'
+          },
+          {
+            loader: 'svgo-loader',
+            options: {
+              plugins: [
+                {removeTitle: true},
+                {removeStyleElement: true},
+                {removeAttrs: {attrs: '(stroke|fill|class)'}},
+                {removeDimensions: true},
+                {removeUselessDefs: true},
+                {removeViewBox: false},
+                {convertPathData: true}
+              ]
+            }
+          }
+        ]
       },
       {
         test: /\.(png|jpg|gif)$/i,
@@ -57,7 +72,7 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: paths.appHtml,
-      favicon: path.resolve(paths.appResources, 'favicon.ico'),
+      favicon: path.resolve(paths.appResources, 'favicon.png'),
       minify: {
         collapseWhitespace: true
       }

@@ -41,7 +41,7 @@ const restAPI = {
         } else {
           dialogHandler.show({
             type: DIALOGTYPE.alert,
-            message: error.response.status + ' ' + error.response.statusText
+            message: error.response.status + ' ' + error.response.data.errorText || error.response.statusText
           });
           console.log(error.response);
         }

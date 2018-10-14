@@ -529,6 +529,8 @@ api.put('/changeAvatar', profileUpload.single('avatar'), (req, res) => {
 });
 
 api.put('/changePassword', (req, res) => {
+  // todo, delete
+  res.status(500).json({errorText: 'Cannot change password.'});
   return;
   let account;
   try {
@@ -744,46 +746,109 @@ api.post('/uploadPhoto/:id', upload.single('photo'), (req, res) => {
     date: fs.statSync(file.path).birthtimeMs
   };
 
-  new Promise((resolve, reject) => {
-    // create thumb
+  // create album for photo
+  let createAlbum = function() {
     let toHeight = Math.min(size.height, thumbHeight);
     let toWidth = size.width / size.height * toHeight;
     let thumbImgPath = getThumbPath(albumId, file.filename);
-    gm(file.path)
-      .resize(toWidth, toHeight)
-      .write(thumbImgPath, (err) => {
-        if (err) {
-          console.log(err);
-          reject(err);
-        }
+    return new Promise((resolve, reject) => {
+      if (size.height > thumbHeight) {
+        gm(file.path)
+          .resize(toWidth, toHeight)
+          .write(thumbImgPath, (err) => {
+            if (err) {
+              console.log(err);
+              reject(err);
+            }
+            resolve();
+          });
+      } else {
         resolve();
-      });
-  }).then(() => {
-    // update images and cover
-    let albumList;
-    try {
-      albumList = db.getData('/albumList');
-    } catch (err) {
-      console.log(err);
-      res.status(500).json({errorText: 'database error.'});
-    }
-    let albumIndex = albumList.findIndex(info => info.id === albumId);
-    let albumInfo = albumList[albumIndex];
+      }
+    });
+  };
 
-    albumInfo.images.unshift(photoInfo);
-    if (!albumInfo.cover) {
-      albumInfo.cover = file.filename;
-    }
-    db.push('/albumList[' + albumIndex + ']', albumInfo);
+  // crop photo to small size when if necessary
+  let cropPhoto = function() {
+    let maxWidth = 1500;
+    let maxHeight = 1000;
+    return new Promise((resolve, reject) => {
+      if (size.width > maxWidth || size.height > maxHeight) {
+        let toWidth, toHeight;
+        let proportion = size.width / size.height;
+        if (proportion < maxWidth / maxHeight) {
+          toHeight = maxHeight;
+          toWidth = proportion * toHeight;
+        } else {
+          toWidth = maxWidth;
+          toHeight = size.height / size.width * toWidth;
+        }
 
-    res.json(photoInfo);
-  }).catch(() => {
-    // create album error, need to roll back: delete photo
+        let resized = gm(file.path)
+          .resize(toWidth, toHeight);
+
+        // save cropped photo, will cover original file
+        resized.write(file.path, (err) => {
+          if (err) {
+            console.log(err);
+            reject(err);
+          }
+          resolve();
+        });
+      } else {
+        resolve();
+      }
+    });
+  };
+
+  // last, save photo info to db
+  let updateDB = function() {
+    return new Promise((resolve, reject) => {
+      let albumList;
+      try {
+        albumList = db.getData('/albumList');
+      } catch (err) {
+        console.log(err);
+        reject('database error.');
+      }
+      let albumIndex = albumList.findIndex(info => info.id === albumId);
+      let albumInfo = albumList[albumIndex];
+
+      albumInfo.images.unshift(photoInfo);
+      if (!albumInfo.cover) {
+        albumInfo.cover = file.filename;
+      }
+
+      try {
+        db.push('/albumList[' + albumIndex + ']', albumInfo);
+        resolve(photoInfo);
+      } catch (err) {
+        console.log(err);
+        reject('database error.');
+      }
+    });
+  };
+
+  // if prev three step failed one or more, roll back to delete photo and thumb
+  let rollBack = function() {
     if (fs.existsSync(file.path)) {
       fs.unlinkSync(file.path);
     }
+    if (fs.existsSync(getThumbPath(albumId, file.filename))) {
+      fs.unlinkSync(getThumbPath(albumId, file.filename));
+    }
     res.status(500).end();
-  });
+  };
+
+  // do these
+  createAlbum()
+    .then(cropPhoto)
+    .then(updateDB)
+    .then((photoInfo) => {
+      // all operation success
+      res.json(photoInfo);
+    })
+    .catch(rollBack);
 });
 
 api.post('/deletePhotos/:id', (req, res) => {

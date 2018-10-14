@@ -34,8 +34,7 @@ module.exports = {
         include: paths.appResources,
         use: [
           {
-            //loader: 'raw-loader'
-            loader: path.resolve(path.resolve(paths.appClient, 'utils', 'testLoader.js'))
+            loader: 'raw-loader'
           },
           {
             loader: 'svgo-loader',
@@ -53,14 +52,6 @@ module.exports = {
           }
         ]
       },
-      /*{
-        test: /\.svg$/,
-        include: paths.appResources,
-        loader: 'svg-sprite-loader',
-        options: {
-          symbolId: 'symbol-[name]'
-        }
-      },*/
       {
         test: /\.(png|jpg|gif)$/i,
         use: [
