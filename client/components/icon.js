@@ -6,20 +6,14 @@ class Icon extends Component {
     const { name, size, className, color } = this.props;
 
     // read svg from file
-    let svgStr = require('resources/icons/' + name + '.svg');
+    let svg = require('resources/icons/' + name + '.svg');
 
-    if (!svgStr) {
+    if (!svg) {
       return null;
     }
 
-    // find svg child html
-    let startMatch = /<svg(\s|\S)*?>/.exec(svgStr);
-    let endMatch = /<\/svg>/.exec(svgStr);
-    let svgChildren = svgStr.substr(startMatch.index + startMatch[0].length, endMatch.index);
-
-    // find svg viewBox attribute
-    let viewBoxMatch = /viewBox="((\d|\D)*?)"/.exec(startMatch[0]);
-    let viewBox = viewBoxMatch && viewBoxMatch[1];
+    // produced by svg-icon-loader
+    const { viewBox, svgChildren } = svg;
 
     // init and external classNames
     let classNames = ['icon'];

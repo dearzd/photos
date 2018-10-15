@@ -38,7 +38,10 @@ module.exports = {
         include: paths.appResources,
         use: [
           {
-            loader: 'raw-loader'
+            loader: 'svg-children-loader',
+            options: {
+              extractAttributes: ['viewBox']
+            }
           },
           {
             loader: 'svgo-loader',
@@ -89,5 +92,8 @@ module.exports = {
       style: path.resolve(paths.appClient, 'style'),
       resources: paths.appResources
     }
+  },
+  resolveLoader: {
+    modules: ['node_modules', path.resolve(paths.appLoaders)]
   }
 };
