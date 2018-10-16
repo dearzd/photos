@@ -1,16 +1,16 @@
 const loaderUtils = require('loader-utils');
 
 module.exports = function (source) {
-  const options = loaderUtils.getOptions(this);
+  let options = loaderUtils.getOptions(this);
   let svgStr = source;
 
   // find svg child html
   let startMatch = /<svg(\s|\S)*?>/.exec(svgStr);
   let endMatch = /<\/svg>/.exec(svgStr);
-  let svgChildren = svgStr.substr(startMatch.index + startMatch[0].length, endMatch.index);
+  let childrenStr = svgStr.substr(startMatch.index + startMatch[0].length, endMatch.index);
 
   let svg = {
-    svgChildren: svgChildren
+    childrenStr: childrenStr
   };
 
   // extract attributes of svg element

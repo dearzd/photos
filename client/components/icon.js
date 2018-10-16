@@ -12,8 +12,8 @@ class Icon extends Component {
       return null;
     }
 
-    // produced by svg-icon-loader
-    const { viewBox, svgChildren } = svg;
+    // produced by svg-children-loader
+    const { viewBox, childrenStr } = svg;
 
     // init and external classNames
     let classNames = ['icon'];
@@ -28,7 +28,7 @@ class Icon extends Component {
         height={size}
         className={classNames.join(' ')}
         fill={color}
-        dangerouslySetInnerHTML={{__html: svgChildren}}
+        dangerouslySetInnerHTML={{__html: childrenStr}}
       />
     );
   }
