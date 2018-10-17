@@ -15,7 +15,7 @@ class Icon extends Component {
     // produced by svg-children-loader
     const { viewBox, childrenStr } = svg;
 
-    // init and external classNames
+    // default and external classNames
     let classNames = ['icon'];
     if (className) {
       classNames.push(className);

@@ -1,6 +1,7 @@
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 const paths = require('./paths');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const SVGTemplatePlugin = require('../plugins/svg-template-plugin');
 
 module.exports = {
   mode: process.env.NODE_ENV,
@@ -79,6 +80,11 @@ module.exports = {
       minify: {
         collapseWhitespace: true
       }
+    }),
+    new SVGTemplatePlugin({
+      template: path.resolve(__dirname, '../plugins/iconsTemplate.html'),
+      iconsFolder: path.resolve(paths.appResources, 'icons'),
+      filename: 'icons.html'
     })
   ],
   resolve: {
