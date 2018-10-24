@@ -5,7 +5,7 @@ const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
 const openBrowser = require('react-dev-utils/openBrowser');
 
-const config = require('../config/webpack.config.dev');
+const config = require('../config/webpack.config');
 
 const compiler = webpack(config);
 const serverConfig = Object.assign({}, config.devServer);
