@@ -9,3 +9,5 @@ server/db.json
 
 # ignore build files
 public/
+
+package-lock.json
