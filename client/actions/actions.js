@@ -5,7 +5,7 @@ export const FETCH_ALBUM_DETAIL_SUCCESS = 'FETCH_ALBUM_DETAIL_SUCCESS';
 export const CREATE_ALBUM_SUCCESS = 'CREATE_ALBUM_SUCCESS';
 export const CHANGE_ALBUM_NAME_SUCCESS = 'CHANGE_ALBUM_NAME_SUCCESS';
 export const DELETE_ALBUM_SUCCESS = 'DELETE_ALBUM_SUCCESS';
-export const UPLOAD_PHOTO_SUCCESS = 'UPLOAD_PHOTO_SUCCESS';
+export const UPLOAD_PHOTO_COMPLETE = 'UPLOAD_PHOTO_COMPLETE';
 export const DELETE_PHOTOS_SUCCESS = 'DELETE_PHOTOS_SUCCESS';
 export const SET_COVER_SUCCESS = 'SET_COVER_SUCCESS';
 
@@ -51,11 +51,14 @@ export const deleteAlbum = (id) => {
   };
 };
 
-export const uploadPhoto = (id, files, onUploadProgress) => {
+export const uploadPhotos = (id, files, onUploadProgress, onSuccess, onFailed) => {
   return (dispatch) => {
-    let promises = [];
-    let uploaded = [];
-    files.forEach((file, index) => {
+    let count = files.length;
+    let succeeded = [];
+    let parallelCount = Math.min(count, 5);
+
+    let doUpload = function(index) {
+      let file = files[index];
       let formData = new FormData();
       formData.append('photo', file);
 
@@ -63,19 +66,47 @@ export const uploadPhoto = (id, files, onUploadProgress) => {
         onUploadProgress: (progressEvent) => {
           onUploadProgress(index, progressEvent);
         },
-        hideLoading: true
+        hideLoading: true,
+        hideError: true
       };
 
-      let uploadPromise = restAPI.post('/uploadPhoto/' + id, formData, config).then((res) => {
-        uploaded.push(res.data);
+      return restAPI.post('/uploadPhoto/' + id, formData, config).then((res) => {
+        succeeded.push(res.data);
+        onSuccess(index);
+      }, () => {
+        onFailed(index);
       });
+    };
 
-      promises.push(uploadPromise);
+    return new Promise((resolve) => {
+      let nextUploadIndex = 0;
+      let done = 0;
+
+      // up to 5 photos in uploading at a same time
+      let sequenceUpload = function() {
+        if (nextUploadIndex < count) {
+          // upload next file
+          doUpload(nextUploadIndex).then(() => {
+            done++;
+            sequenceUpload();
+          });
+          nextUploadIndex++;
+        } else {
+          // all file uploaded
+          if (done === count) {
+            console.log('all done');
+            dispatch({type: UPLOAD_PHOTO_COMPLETE, payload: {albumId: id, succeeded: succeeded}});
+            resolve();
+          }
+        }
+      };
+
+      for (let i = 0; i < parallelCount; i++) {
+        sequenceUpload();
+      }
+
     });
 
-    return Promise.all(promises).then(() => {
-      dispatch({type: UPLOAD_PHOTO_SUCCESS, payload: {albumId: id, uploaded: uploaded}});
-    });
   };
 };
 

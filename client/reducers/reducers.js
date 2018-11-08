@@ -5,7 +5,7 @@ import {
   CREATE_ALBUM_SUCCESS,
   CHANGE_ALBUM_NAME_SUCCESS,
   DELETE_ALBUM_SUCCESS,
-  UPLOAD_PHOTO_SUCCESS,
+  UPLOAD_PHOTO_COMPLETE,
   DELETE_PHOTOS_SUCCESS,
   SET_COVER_SUCCESS
 } from 'actions/actions';
@@ -88,6 +88,7 @@ function reducers(state = initState, action) {
     case FETCH_ALBUM_DETAIL_SUCCESS: {
       let { albumInfo } = payload;
       let { albums } = state;
+      sortPhoto(albumInfo.images);
       if (!albums) {
         // if albums === null, means never go to list page,
         // this time, just push the current album info to state.albums
@@ -140,25 +141,25 @@ function reducers(state = initState, action) {
         albums: {$set: albums}
       });
     }
-    case UPLOAD_PHOTO_SUCCESS: {
-      let { albumId, uploaded } = payload;
+    case UPLOAD_PHOTO_COMPLETE: {
+      let { albumId, succeeded } = payload;
       let albums = state.albums;
 
-      if (albums) {
+      if (succeeded.length && albums) {
         let albumIndex = getAlbumIndex(albumId, albums);
         let currentAlbum = albums[albumIndex];
         // sort by date descending
-        sortPhoto(uploaded);
+        sortPhoto(succeeded);
         // if is new album with no cover, set cover
         if (!currentAlbum.cover) {
           currentAlbum = update(currentAlbum, {
-            cover: {$set: uploaded[uploaded.length - 1].name} // set first uploaded photo as cover
+            cover: {$set: succeeded[succeeded.length - 1].name} // set first uploaded photo as cover
           });
         }
         // change count and push images
         currentAlbum = update(currentAlbum, {
-          count: {$set: currentAlbum.count + uploaded.length},
-          images: {$unshift: uploaded}
+          count: {$set: currentAlbum.count + succeeded.length},
+          images: {$unshift: succeeded}
         });
         albums = update(albums, {
           [albumIndex]: {$set: currentAlbum}

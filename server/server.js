@@ -17,7 +17,7 @@ const paths = {
   albumsFolder: path.resolve(__dirname, '../public/albums')
 };
 const sitePages = ['/album', '/uploadPhoto', '/login', '/account', '/settings'];
-const supportTypes = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.ico', '.svg'];
+const supportTypes = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.ico', '.svg']; // todo, change to mimitype
 const thumbHeight = 512;
 
 // use express
@@ -31,25 +31,32 @@ let db = new JsonDB(path.resolve(__dirname, 'db'), true, true);
 let upload = multer({
   storage: multer.diskStorage({
     destination: (req, file, cb) => {
-      cb(null, path.resolve(paths.albumsFolder, req.params.id));
+      cb(null, path.resolve(paths.albumsFolder, req.params.id, 'large'));
     },
     filename: (req, file, cb) => {
       let originalName = file.originalname;
-      let files = fs.readdirSync(path.resolve(paths.albumsFolder, req.params.id));
+      let albumList = db.getData('/albumList');
+      let currentAlbum = albumList.filter((albumInfo) => {
+        return albumInfo.id === req.params.id;
+      })[0];
+      let images = currentAlbum && currentAlbum.images;
 
-      // todo, check from db, not from disk
-      let count = 0;
-      let getName = function(fileName) {
-        if (~files.findIndex(name => name === fileName)) {
-          // duplicated name, plus 1
-          fileName = getBaseName(originalName) + '_' + ++count + path.extname(fileName);
-          return getName(fileName);
-        } else {
-          return fileName;
-        }
-      };
+      if (Array.isArray(images) && images.length) {
+        let count = 0;
+        let getName = function(fileName) {
+          if (~images.findIndex(imgInfo => imgInfo.name === fileName)) {
+            // duplicated name, plus 1
+            fileName = getBaseName(originalName) + '_' + ++count + path.extname(fileName);
+            return getName(fileName);
+          } else {
+            return fileName;
+          }
+        };
+        cb(null, getName(originalName));
+      } else {
+        cb(null, originalName);
+      }
 
-      cb(null, getName(originalName));
     }
   }),
   fileFilter: (req, file, cb) => {
@@ -146,9 +153,17 @@ function getBaseName(photoName) {
   return path.basename(photoName, path.extname(photoName));
 }
 
+function getPhotoPath(albumId, photoName) {
+  return path.resolve(paths.albumsFolder, albumId, photoName);
+}
+
 function getThumbPath(albumId, photoName) {
-  let thumbName = getBaseName(photoName) + '-thumb.jpg';
+  let thumbName = getBaseName(photoName) + '.jpg';
   return path.resolve(paths.albumsFolder, albumId, 'thumb', thumbName);
+}
+
+function getLargePath(albumId, photoName) {
+  return path.resolve(paths.albumsFolder, albumId, 'large', photoName);
 }
 
 function isFile(filePath) {
@@ -242,7 +257,7 @@ function checkPhotos() {
   console.log('--checking for photos...');
   let albumList;
   try {
-    albumList = db.getData('/albumList');
+    albumList = db.getData('/albumList'); // todo, get albumList from real folder
   } catch (err) {
     return;
   }
@@ -298,6 +313,8 @@ function checkThumb() {
     let thumbImages = fs.readdirSync(thumbFolderPath);
 
     if (dbImages.length !== thumbImages.length) {
+      // todo, this case just handler has photo but no thumb
+      // todo, if has thumb but no photo? if has large but no photo?
       // image's count in db's albumList not equals thumb count
       dbImages.forEach((imgInfo) => {
         let imgPath = path.resolve(albumPath, imgInfo.name);
@@ -335,6 +352,27 @@ function checkThumb() {
   return Promise.all(promises);
 }
 
+function checkLargePhoto() {
+  console.log('--checking for large photo...');
+  let albumList;
+  try {
+    albumList = db.getData('/albumList');
+  } catch (err) {
+    return;
+  }
+
+  albumList.forEach((albumInfo) => {
+    let albumPath = path.resolve(paths.albumsFolder, albumInfo.id);
+    let largeFolderPath = path.resolve(albumPath, 'large');
+    if (!fs.existsSync(largeFolderPath)) {
+      // if no thumb folder, create
+      fs.mkdirSync(largeFolderPath);
+    }
+
+    // todo,
+  });
+}
+
 // init app
 (function init() {
   checkAccount()
@@ -343,6 +381,7 @@ function checkThumb() {
     .then(checkAlbumsFolder)
     .then(checkPhotos)
     .then(checkThumb)
+    .then(checkLargePhoto)
     .then(() => {
       app.listen(port, () => {
         console.log('NodeJS server on port %s', port);
@@ -529,9 +568,6 @@ api.put('/changeAvatar', profileUpload.single('avatar'), (req, res) => {
 });
 
 api.put('/changePassword', (req, res) => {
-  // todo, delete
-  res.status(500).json({errorText: 'Cannot change password.'});
-  return;
   let account;
   try {
     account = db.getData('/account');
@@ -555,7 +591,8 @@ api.get('/albums', (req, res) => {
   try {
     albumList = db.getData('/albumList');
   } catch (err) {
-    albumList = [];
+    console.log(err);
+    res.status(500).json({errorText: 'database error.'});
   }
   albumList = albumList.map((albumInfo) => {
     let info = {...albumInfo};
@@ -590,36 +627,6 @@ api.get('/album/:id', (req, res) => {
       count: albumInfo.images.length
     }
   });
-
-  // get all image name
-  /*fs.readdir(albumPath, (err, files) => {
-    if (err) {
-      console.log(err);
-      return res.status(500).json(err.code);
-    }
-
-    let images = [];
-    files.forEach((fileName) => {
-      let filePath = path.resolve(albumPath, fileName);
-      let stat = fs.statSync(filePath);
-
-      if (stat.isFile() && isImg(fileName) && !isHiddenItem(fileName)) {
-        let size = sizeOf(filePath);
-        images.push({
-          name: fileName,
-          date: stat.birthtimeMs,
-          size: {
-            width: size.width,
-            height: size.height
-          }
-        });
-      }
-    });
-    return res.json({
-      albumInfo: albumInfo,
-      images: images
-    });
-  });*/
 
 });
 
@@ -742,7 +749,7 @@ api.post('/uploadPhoto/:id', upload.single('photo'), (req, res) => {
   let size = sizeOf(file.path);
   let photoInfo = {
     name: file.filename,
-    size: [size.width, size.height],
+    size: [size.width, size.height], // todo, save cropped size
     date: fs.statSync(file.path).birthtimeMs
   };
 
@@ -752,19 +759,19 @@ api.post('/uploadPhoto/:id', upload.single('photo'), (req, res) => {
     let toWidth = size.width / size.height * toHeight;
     let thumbImgPath = getThumbPath(albumId, file.filename);
     return new Promise((resolve, reject) => {
-      if (size.height > thumbHeight) {
-        gm(file.path)
-          .resize(toWidth, toHeight)
-          .write(thumbImgPath, (err) => {
-            if (err) {
-              console.log(err);
-              reject(err);
-            }
-            resolve();
-          });
-      } else {
-        resolve();
+      if (file.filename === 'Sketch (2).png') {
+        reject();
+        return;
       }
+      gm(file.path)
+        .resize(toWidth, toHeight)
+        .write(thumbImgPath, (err) => {
+          if (err) {
+            console.log(err);
+            reject(err);
+          }
+          resolve();
+        });
     });
   };
 
@@ -772,6 +779,7 @@ api.post('/uploadPhoto/:id', upload.single('photo'), (req, res) => {
   let cropPhoto = function() {
     let maxWidth = 1500;
     let maxHeight = 1000;
+    let photoPath = getPhotoPath(albumId, file.filename);
     return new Promise((resolve, reject) => {
       if (size.width > maxWidth || size.height > maxHeight) {
         let toWidth, toHeight;
@@ -784,19 +792,20 @@ api.post('/uploadPhoto/:id', upload.single('photo'), (req, res) => {
           toHeight = size.height / size.width * toWidth;
         }
 
-        let resized = gm(file.path)
-          .resize(toWidth, toHeight);
-
-        // save cropped photo, will cover original file
-        resized.write(file.path, (err) => {
-          if (err) {
-            console.log(err);
-            reject(err);
-          }
-          resolve();
-        });
+        // save cropped photo
+        gm(file.path)
+          .resize(toWidth, toHeight)
+          .write(photoPath, (err) => {
+            if (err) {
+              console.log(err);
+              reject(err);
+            }
+            // delete large photo, todo
+            // fs.unlinkSync(file.path);
+            resolve();
+          });
       } else {
-        resolve();
+        fs.copyFile(file.path, photoPath, resolve);
       }
     });
   };
@@ -831,16 +840,23 @@ api.post('/uploadPhoto/:id', upload.single('photo'), (req, res) => {
 
   // if prev three step failed one or more, roll back to delete photo and thumb
   let rollBack = function() {
+    // delete large photo
     if (fs.existsSync(file.path)) {
       fs.unlinkSync(file.path);
     }
+    // delete thumb
     if (fs.existsSync(getThumbPath(albumId, file.filename))) {
       fs.unlinkSync(getThumbPath(albumId, file.filename));
     }
-    res.status(500).end();
+    // delete cropped photo
+    let croppedPath = path.resolve(paths.albumsFolder, albumId, file.filename);
+    if (fs.existsSync(croppedPath)) {
+      fs.unlinkSync(croppedPath);
+    }
+    res.status(500).end(); // todo, error text
   };
 
-  // do these
+  // do all
   createAlbum()
     .then(cropPhoto)
     .then(updateDB)
@@ -889,13 +905,17 @@ api.post('/deletePhotos/:id', (req, res) => {
       albumInfo.images[indexInDb].needToDelete = true;
     }
 
-    let photoPath = path.resolve(paths.albumsFolder, albumId, photoName);
+    let photoPath = getPhotoPath(albumId, photoName);
     let thumbPath = getThumbPath(albumId, photoName);
+    let largePath = getLargePath(albumId, photoName);
     if (fs.existsSync(photoPath)) {
       fs.unlinkSync(photoPath);
     }
     if (fs.existsSync(thumbPath)) {
       fs.unlinkSync(thumbPath);
+    }
+    if (fs.existsSync(largePath)) {
+      fs.unlinkSync(largePath);
     }
   });
 

@@ -36,9 +36,12 @@ const restAPI = {
     }, function(error) {
       // error
       if (error.response) {
+        if (error.response.config.hideError) {
+          console.log('hide loading');
+        }
         if (error.response.status === 403) {
           history.push('/login');
-        } else {
+        } else if (!error.response.config.hideError) {
           dialogHandler.show({
             type: DIALOGTYPE.alert,
             message: error.response.status + ' ' + error.response.data.errorText || error.response.statusText
@@ -46,7 +49,9 @@ const restAPI = {
           console.log(error.response);
         }
       }
-      dispatch(hideLoading());
+      if (!error.response.config.hideLoading) {
+        dispatch(hideLoading());
+      }
       // stop then
       return Promise.reject(error);
     });

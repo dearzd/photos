@@ -20,7 +20,7 @@ function getPhotoUrl(id, photoName) {
 function getThumbUrl(id, photoName) {
   alertPhotoName(photoName);
 
-  let thumbName = getBaseName(photoName) + '-thumb.jpg';
+  let thumbName = getBaseName(photoName) + '.jpg';
 
   return '/albums/' + id + '/thumb/' + thumbName;
 }
