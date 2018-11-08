@@ -759,10 +759,6 @@ api.post('/uploadPhoto/:id', upload.single('photo'), (req, res) => {
     let toWidth = size.width / size.height * toHeight;
     let thumbImgPath = getThumbPath(albumId, file.filename);
     return new Promise((resolve, reject) => {
-      if (file.filename === 'Sketch (2).png') {
-        reject();
-        return;
-      }
       gm(file.path)
         .resize(toWidth, toHeight)
         .write(thumbImgPath, (err) => {
