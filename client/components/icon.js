@@ -5,7 +5,11 @@ class Icon extends Component {
   render() {
     const { name, size, className, color } = this.props;
 
-    // read svg from file
+    if (!name) {
+      return null;
+    }
+
+    // read svg from file, svg-children-loader
     let svg = require('resources/icons/' + name + '.svg');
 
     if (!svg) {

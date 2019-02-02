@@ -10,7 +10,6 @@ module.exports = {
   appClient: resolveApp('client'),
   appServer: resolveApp('server'),
   appPublic: resolveApp('public'),
-  appLoaders: resolveApp('loaders'),
   appResources: resolveApp('client/resources'),
   appHtml: resolveApp('client/index.html'),
   appEntryJS: resolveApp('client/entry.js')

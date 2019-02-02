@@ -83,9 +83,6 @@ const common = {
       resources: paths.appResources
     }
   },
-  resolveLoader: {
-    modules: ['node_modules', path.resolve(paths.appLoaders)]
-  },
 };
 
 if (process.env.npm_lifecycle_event=== 'start') {
