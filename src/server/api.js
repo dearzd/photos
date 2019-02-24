@@ -56,7 +56,7 @@ const upload = multer({
 const profileUpload = multer({
   storage: multer.diskStorage({
     destination: (req, file, cb) => {
-      cb(null, paths.webHome);
+      cb(null, paths.uploadFolder);
     },
     filename: (req, file, cb) => {
       let originalName = file.originalname;
@@ -176,7 +176,7 @@ api.put('/settings', profileUpload.single('landingBgFile'), (req, res) => {
   // delete bg or create thumb
   if (settings.landingBg.url && !bgUrl) {
     // delete bg.jpg
-    let bgPath = path.resolve(paths.webHome, settings.landingBg.url.split('?')[0]);
+    let bgPath = path.resolve(paths.uploadFolder, settings.landingBg.url.split('?')[0]);
     if (fs.existsSync(bgPath)) {
       fs.unlinkSync(bgPath);
     }
@@ -213,10 +213,10 @@ api.put('/changeAvatar', profileUpload.single('avatar'), (req, res) => {
         let size = sizeOf(file.path);
         let toHeight = Math.min(size.height, thumbHeight);
         let toWidth = size.width / size.height * toHeight;
-        let bgThumbPath = path.resolve(paths.webHome, avatarName);
+        let bgThumbPath = path.resolve(paths.uploadFolder, avatarName);
         let readStream = fs.createReadStream(file.path);
         fs.unlinkSync(file.path);
-        let prevGifAvatar = path.resolve(paths.webHome, 'avatar.gif');
+        let prevGifAvatar = path.resolve(paths.uploadFolder, 'avatar.gif');
         if (fs.existsSync(prevGifAvatar)) {
           fs.unlinkSync(prevGifAvatar);
         }
@@ -231,7 +231,7 @@ api.put('/changeAvatar', profileUpload.single('avatar'), (req, res) => {
           });
       } else {
         avatarName = file.filename;
-        let prevJpgAvatar = path.resolve(paths.webHome, 'avatar.jpg');
+        let prevJpgAvatar = path.resolve(paths.uploadFolder, 'avatar.jpg');
         if (fs.existsSync(prevJpgAvatar)) {
           fs.unlinkSync(prevJpgAvatar);
         }
@@ -286,7 +286,7 @@ api.get('/albums', (req, res) => {
   res.json(albumList);
 });
 
-api.get('/album/:id', (req, res) => {
+api.get('/albums/:id', (req, res) => {
   let albumId = req.params.id;
 
   // get album information
@@ -313,8 +313,8 @@ api.get('/album/:id', (req, res) => {
 });
 
 /* create album */
-api.post('/album/:name', (req, res) => {
-  let albumName = req.params.name;
+api.post('/albums', (req, res) => {
+  let albumName = req.body.name;
 
   // compute albumId
   let albumList;
@@ -363,7 +363,7 @@ api.post('/album/:name', (req, res) => {
 });
 
 /* change album name */
-api.put('/album/:id', (req, res) => {
+api.put('/albums/:id', (req, res) => {
   let id = req.params.id;
   let name = req.body.name;
 
@@ -386,7 +386,7 @@ api.put('/album/:id', (req, res) => {
 });
 
 /* delete album */
-api.delete('/album/:id', (req, res) => {
+api.delete('/albums/:id', (req, res) => {
   let albumId = req.params.id;
   let albumPath = path.resolve(paths.albumsFolder, albumId);
 

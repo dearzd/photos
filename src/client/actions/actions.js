@@ -20,15 +20,15 @@ export const fetchAlbums = () => {
 
 export const fetchAlbum = (id) => {
   return (dispatch) => {
-    return restAPI.get('/album/' + id).then((res) => {
+    return restAPI.get('/albums/' + id).then((res) => {
       dispatch({type: FETCH_ALBUM_DETAIL_SUCCESS, payload: res.data});
     });
   };
 };
 
-export const createAlbum = (name) => {
+export const createAlbum = (albumName) => {
   return (dispatch) => {
-    return restAPI.post('/album/' + name).then((res) => {
+    return restAPI.post('/albums', {name: albumName}).then((res) => {
       dispatch({type: CREATE_ALBUM_SUCCESS, payload: res.data});
       return res.data.id; // return id for redirect
     });
@@ -37,7 +37,7 @@ export const createAlbum = (name) => {
 
 export const changeAlbumName = (id, albumName) => {
   return (dispatch) => {
-    return restAPI.put('/album/' + id, {name: albumName}).then(() => {
+    return restAPI.put('/albums/' + id, {name: albumName}).then(() => {
       dispatch({type: CHANGE_ALBUM_NAME_SUCCESS, payload: {albumId: id, albumName: albumName}});
     });
   };
@@ -45,7 +45,7 @@ export const changeAlbumName = (id, albumName) => {
 
 export const deleteAlbum = (id) => {
   return (dispatch) => {
-    return restAPI.delete('/album/' + id).then(() => {
+    return restAPI.delete('/albums/' + id).then(() => {
       dispatch({type: DELETE_ALBUM_SUCCESS, payload: {albumId: id}});
     });
   };

@@ -37,7 +37,7 @@ class AlbumList extends Component {
   handleConfirmCreate(name) {
     if (name) {
       this.props.createAlbum(name).then((id) => {
-        this.props.history.push('/album/' + id);
+        this.props.history.push('/albums/' + id);
       });
     } else {
       dialogHandler.show({
@@ -75,7 +75,7 @@ class AlbumList extends Component {
                   backgroundUrl += 'url("' + commonUtil.getThumbUrl(folderInfo.id, folderInfo.cover) + '")';
                 }
                 return (
-                  <Link className="album-wrap" key={index} to={'/album/' + folderInfo.id}>
+                  <Link className="album-wrap" key={index} to={'/albums/' + folderInfo.id}>
                     <div className="album-cover-wrapper">
                       <div className="album-cover" style={{'backgroundImage': backgroundUrl}} />
                     </div>

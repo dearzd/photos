@@ -17,7 +17,7 @@ const {
 } = require('./serverConf');
 let db = require('./db');
 
-const sitePages = ['/album', '/uploadPhoto', '/login', '/account', '/settings'];
+const sitePages = ['/albums', '/uploadPhoto', '/login', '/account', '/settings'];
 
 // use express
 let app = express();
@@ -123,12 +123,17 @@ function checkAlbumList() {
   }
 }
 
-// check albums folder whether existing, if not, create folder
-function checkAlbumsFolder() {
-  console.log('--checking for albums folder...');
+// check upload folder whether existing, if not, create folder
+function checkUploadFolder() {
+  console.log('--checking for upload folder...');
   if(!fs.existsSync(paths.uploadFolder)) {
     fs.mkdirSync(paths.uploadFolder);
   }
+}
+
+// check albums folder whether existing, if not, create folder
+function checkAlbumsFolder() {
+  console.log('--checking for albums folder...');
   if(!fs.existsSync(paths.albumsFolder)) {
     fs.mkdirSync(paths.albumsFolder);
   }
@@ -261,6 +266,7 @@ function checkLargePhoto() {
   checkAccount()
     .then(checkSettings)
     .then(checkAlbumList)
+    .then(checkUploadFolder)
     .then(checkAlbumsFolder)
     .then(checkPhotos)
     .then(checkThumb)
