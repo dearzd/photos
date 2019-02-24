@@ -27,7 +27,6 @@ class App extends Component {
   }
 
   render() {
-    console.log('app render');
     return (
       <div id="app">
         <Switch>

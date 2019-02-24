@@ -11,18 +11,18 @@ function ticktock() {
   };
 }
 
-function getPhotoUrl(id, photoName) {
+function getPhotoUrl(albumId, photoName) {
   alertPhotoName(photoName);
 
-  return '/albums/' + id + '/' + photoName;
+  return '/albums/' + albumId + '/' + photoName;
 }
 
-function getThumbUrl(id, photoName) {
+function getThumbUrl(albumId, photoName) {
   alertPhotoName(photoName);
 
   let thumbName = getBaseName(photoName) + '.jpg';
 
-  return '/albums/' + id + '/thumb/' + thumbName;
+  return '/albums/' + albumId + '/thumb/' + thumbName;
 }
 
 function getBaseName(photoName) {
