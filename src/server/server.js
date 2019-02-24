@@ -3,7 +3,6 @@ const fs = require('fs');
 const path = require('path');
 const { URL } = require('url');
 const bodyParser = require('body-parser');
-const JsonDB = require('node-json-db');
 const session = require('express-session');
 const sizeOf = require('image-size');
 const gm = require('gm');
@@ -16,14 +15,12 @@ const {
   paths,
   md5Key
 } = require('./serverConf');
+let db = require('./db');
 
 const sitePages = ['/album', '/uploadPhoto', '/login', '/account', '/settings'];
 
 // use express
 let app = express();
-
-// simple database to store albums information
-let db = new JsonDB(path.resolve(__dirname, 'db'), true, true);
 
 // session define
 let appSession = session({
@@ -65,6 +62,7 @@ app.use((req, res, next) => {
   }
 });
 app.use(express.static(paths.webHome)); // static, html, js, css, favicon.icon, and images
+app.use(express.static(paths.uploadFolder));
 app.use(sitePages, (req, res) => {
   res.type('html').send(utils.getHomePage());
 });
@@ -128,6 +126,9 @@ function checkAlbumList() {
 // check albums folder whether existing, if not, create folder
 function checkAlbumsFolder() {
   console.log('--checking for albums folder...');
+  if(!fs.existsSync(paths.uploadFolder)) {
+    fs.mkdirSync(paths.uploadFolder);
+  }
   if(!fs.existsSync(paths.albumsFolder)) {
     fs.mkdirSync(paths.albumsFolder);
   }

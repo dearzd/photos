@@ -5,9 +5,10 @@
 node_modules/
 
 # ignore database file
-server/db.json
+db.json
 
 # ignore build files
-public/
+dist/
+upload/
 
 package-lock.json

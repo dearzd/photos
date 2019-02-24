@@ -4,13 +4,11 @@ const prodConfig = require('./webpack.config.prod');
 const path = require('path');
 const paths = require('./paths');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 const common = {
   mode: process.env.NODE_ENV,
   output: {
-    path: paths.appPublic,
+    path: path.resolve(paths.appBuild, 'static'),
     publicPath: '/',
     filename: 'client.bundle.js'
   },
@@ -29,7 +27,12 @@ const common = {
         test: /\.css$/,
         use: [
           MiniCssExtractPlugin.loader,
-          'css-loader'
+          {
+            loader: 'css-loader',
+            options: {
+              minimize: true
+            }
+          }
         ]
       },
       {
@@ -65,12 +68,6 @@ const common = {
       filename: 'style.css'
     })
   ],
-  optimization: {
-    minimizer: [
-      new UglifyJsPlugin(),
-      new OptimizeCSSAssetsPlugin()
-    ]
-  },
   resolve: {
     extensions: ['.js', '.css', '.svg'],
     alias: {

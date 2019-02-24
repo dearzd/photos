@@ -2,7 +2,6 @@ const express = require('express');
 const multer = require('multer');
 const fs = require('fs');
 const path = require('path');
-const JsonDB = require('node-json-db');
 const sizeOf = require('image-size');
 const gm = require('gm');
 
@@ -11,6 +10,7 @@ const {
   thumbHeight,
   paths
 } = require('./serverConf');
+let db = require('./db');
 
 // multer middleware for upload images
 const upload = multer({
@@ -68,7 +68,6 @@ const profileUpload = multer({
 });
 
 let api = express.Router();
-let db = new JsonDB(path.resolve(__dirname, 'db'), true, true);
 
 function notNeedCertification(req) {
   if (req.method === 'GET') {
@@ -340,6 +339,10 @@ api.post('/album/:name', (req, res) => {
     // create thumb folder
     let thumbFolderPath = path.resolve(albumPath, 'thumb');
     fs.mkdirSync(thumbFolderPath); // todo, error handler
+
+    // create large folder
+    let largeFolderPath = path.resolve(albumPath, 'large');
+    fs.mkdirSync(largeFolderPath); // todo, error handler
 
     let albumInfo = {
       id: albumId,

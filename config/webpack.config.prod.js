@@ -2,6 +2,7 @@ const path = require('path');
 const paths = require('./paths');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const SVGTemplatePlugin = require('../plugins/svg-template-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   entry: paths.appEntryJS,
@@ -27,6 +28,13 @@ module.exports = {
         collapseWhitespace: true
       }
     }),
+    new CopyPlugin([{
+      from: paths.appServer,
+      to: path.resolve(paths.appBuild, 'server')
+    }, {
+      from : path.resolve(__dirname, '../package.json'),
+      to: path.resolve(paths.appBuild)
+    }]),
     new SVGTemplatePlugin({
       template: path.resolve(__dirname, '../plugins/iconsTemplate.html'),
       iconsFolder: path.resolve(paths.appResources, 'icons'),

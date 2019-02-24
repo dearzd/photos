@@ -14,7 +14,6 @@ module.exports = {
     })
   ],
   devServer: {
-    contentBase: paths.appHtml,
     hot: true,
     compress: true,
     proxy: {

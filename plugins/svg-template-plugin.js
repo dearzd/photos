@@ -22,7 +22,10 @@ class SVGTemplatePlugin {
     if (compiler.hooks) {
       compiler.hooks
         .emit.tap('SVGTemplatePlugin', () => {
-        this.packageIcons(compiler.options.output.path);
+        this.packageIcons(compiler.options.output.path)
+          .catch((e) => {
+            throw new Error(e);
+          });
       });
     } else {
       compiler.plugin('emit', (compilation, callback) => {

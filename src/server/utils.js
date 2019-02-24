@@ -65,6 +65,7 @@ module.exports = {
   getThumbPath,
   getLargePath,
   isFile,
+  isDirectory,
   isImg,
   isHiddenItem
 };
