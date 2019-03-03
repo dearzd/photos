@@ -17,10 +17,11 @@ const {
 } = require('./serverConf');
 let db = require('./db');
 
-const sitePages = ['/albums', '/uploadPhoto', '/login', '/account', '/settings'];
+const sitePages = ['/album', '/uploadPhoto', '/login', '/account', '/settings'];
 
 // use express
 let app = express();
+//app.disable('x-powered-by');
 
 // session define
 let appSession = session({

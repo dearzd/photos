@@ -10,7 +10,7 @@ const common = {
   output: {
     path: path.resolve(paths.appBuild, 'static'),
     publicPath: '/',
-    filename: 'client.bundle.js'
+    filename: 'photos.js'
   },
   module: {
     rules: [

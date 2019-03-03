@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 import AlbumList from './albumList';
 import AlbumDetail from './albumDetail';
 import UploadPhoto from './uploadPhoto';
@@ -31,10 +31,10 @@ class App extends Component {
       <div id="app">
         <Switch>
           {/* home page */}
-          <Route path="/albums" exact component={AlbumList} />
+          <Route path="/" exact component={AlbumList} />
 
           {/* album detail page */}
-          <Route path="/albums/:id" component={AlbumDetail} />
+          <Route path="/album/:id" component={AlbumDetail} />
 
           {/* upload photo page */}
           <Route path="/uploadPhoto/:id" component={UploadPhoto} />
@@ -47,8 +47,6 @@ class App extends Component {
 
           {/* settings page */}
           <Route path="/settings" component={Settings} />
-
-          <Redirect to="/albums" />
         </Switch>
 
         {/* app global loading */}

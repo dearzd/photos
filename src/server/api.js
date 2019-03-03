@@ -286,7 +286,7 @@ api.get('/albums', (req, res) => {
   res.json(albumList);
 });
 
-api.get('/albums/:id', (req, res) => {
+api.get('/album/:id', (req, res) => {
   let albumId = req.params.id;
 
   // get album information
@@ -313,7 +313,7 @@ api.get('/albums/:id', (req, res) => {
 });
 
 /* create album */
-api.post('/albums', (req, res) => {
+api.post('/album', (req, res) => {
   let albumName = req.body.name;
 
   // compute albumId
@@ -363,7 +363,7 @@ api.post('/albums', (req, res) => {
 });
 
 /* change album name */
-api.put('/albums/:id', (req, res) => {
+api.put('/album/:id', (req, res) => {
   let id = req.params.id;
   let name = req.body.name;
 
@@ -386,7 +386,7 @@ api.put('/albums/:id', (req, res) => {
 });
 
 /* delete album */
-api.delete('/albums/:id', (req, res) => {
+api.delete('/album/:id', (req, res) => {
   let albumId = req.params.id;
   let albumPath = path.resolve(paths.albumsFolder, albumId);
 
@@ -422,6 +422,29 @@ api.delete('/albums/:id', (req, res) => {
   }
 
   return res.json({});
+});
+
+api.put('/album/:id/cover', (req, res) => {
+  let albumId = req.params.id;
+  let imgName = req.body.name;
+  if (utils.isImg(imgName)) {
+    let albumList;
+    try {
+      albumList = db.getData('/albumList');
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({errorText: 'database error.'});
+    }
+
+    let albumIndex = albumList.findIndex(info => info.id === albumId);
+    if (!~albumIndex) {
+      res.status(404).json({errorText: 'Cannot find album'});
+    }
+
+    db.push('/albumList[' + albumIndex + ']/cover', imgName);
+  }
+
+  res.json({});
 });
 
 /* upload photo */
@@ -613,29 +636,6 @@ api.post('/deletePhotos/:id', (req, res) => {
   }
 
   db.push('/albumList[' + albumIndex + ']', albumInfo);
-
-  res.json({});
-});
-
-api.put('/setCover/:id', (req, res) => {
-  let albumId = req.params.id;
-  let imgName = req.body.name;
-  if (utils.isImg(imgName)) {
-    let albumList;
-    try {
-      albumList = db.getData('/albumList');
-    } catch (err) {
-      console.log(err);
-      res.status(500).json({errorText: 'database error.'});
-    }
-
-    let albumIndex = albumList.findIndex(info => info.id === albumId);
-    if (!~albumIndex) {
-      res.status(404).json({errorText: 'Cannot find album'});
-    }
-
-    db.push('/albumList[' + albumIndex + ']/cover', imgName);
-  }
 
   res.json({});
 });

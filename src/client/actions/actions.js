@@ -20,7 +20,7 @@ export const fetchAlbums = () => {
 
 export const fetchAlbum = (id) => {
   return (dispatch) => {
-    return restAPI.get('/albums/' + id).then((res) => {
+    return restAPI.get('/album/' + id).then((res) => {
       dispatch({type: FETCH_ALBUM_DETAIL_SUCCESS, payload: res.data});
     });
   };
@@ -28,7 +28,7 @@ export const fetchAlbum = (id) => {
 
 export const createAlbum = (albumName) => {
   return (dispatch) => {
-    return restAPI.post('/albums', {name: albumName}).then((res) => {
+    return restAPI.post('/album', {name: albumName}).then((res) => {
       dispatch({type: CREATE_ALBUM_SUCCESS, payload: res.data});
       return res.data.id; // return id for redirect
     });
@@ -37,7 +37,7 @@ export const createAlbum = (albumName) => {
 
 export const changeAlbumName = (id, albumName) => {
   return (dispatch) => {
-    return restAPI.put('/albums/' + id, {name: albumName}).then(() => {
+    return restAPI.put('/album/' + id, {name: albumName}).then(() => {
       dispatch({type: CHANGE_ALBUM_NAME_SUCCESS, payload: {albumId: id, albumName: albumName}});
     });
   };
@@ -45,7 +45,7 @@ export const changeAlbumName = (id, albumName) => {
 
 export const deleteAlbum = (id) => {
   return (dispatch) => {
-    return restAPI.delete('/albums/' + id).then(() => {
+    return restAPI.delete('/album/' + id).then(() => {
       dispatch({type: DELETE_ALBUM_SUCCESS, payload: {albumId: id}});
     });
   };
@@ -120,7 +120,7 @@ export const deletePhotos = (id, names) => {
 
 export const setCover = (id, imgName) => {
   return (dispatch) => {
-    return restAPI.put('/setCover/' + id, {name: imgName}).then(() => {
+    return restAPI.put('/album/' + id + '/cover', {name: imgName}).then(() => {
       dispatch({type: SET_COVER_SUCCESS, payload: {albumId: id, imgName: imgName}});
     });
   };

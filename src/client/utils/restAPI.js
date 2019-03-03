@@ -46,7 +46,7 @@ const restAPI = {
             type: DIALOGTYPE.alert,
             message: error.response.status + ' ' + error.response.data.errorText || error.response.statusText
           });
-          console.log(error.response);
+          //console.log(error.response);
         }
       }
       if (!error.response.config.hideLoading) {
