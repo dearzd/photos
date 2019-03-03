@@ -376,7 +376,6 @@ class AlbumDetail extends Component {
   }
 
   render() {
-    console.log('detail render');
     const { albumId, currentIndex, selectMode, computedWidth } = this.state;
     let currentAlbum = AlbumDetail.getCurrentAlbum(this.props, this.state);
 

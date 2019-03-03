@@ -94,7 +94,6 @@ export const uploadPhotos = (id, files, onUploadProgress, onSuccess, onFailed) =
         } else {
           // all file uploaded
           if (done === count) {
-            console.log('all done');
             dispatch({type: UPLOAD_PHOTO_COMPLETE, payload: {albumId: id, succeeded: succeeded}});
             resolve();
           }

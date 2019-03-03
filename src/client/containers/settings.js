@@ -33,7 +33,6 @@ class Account extends Component {
 
   static getDerivedStateFromProps(props, state) {
     if (props !== state.prevProps) {
-      console.log('change');
       let settings = props.settings || {};
       return {
         whiteList: settings.whiteList,
@@ -148,7 +147,6 @@ class Account extends Component {
   }
 
   render() {
-    console.log('setting render');
     const { whiteList, landingBg, autoCrop, bgBase64 } = this.state;
 
     let bg = null;
