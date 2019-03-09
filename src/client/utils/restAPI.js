@@ -20,6 +20,12 @@ const restAPI = {
   setup: (dispatch, history) => {
     // before send, show loading
     axios.interceptors.request.use((config) => {
+      // add timestamp to api url for no cache
+      if (~config.url.indexOf('?')) {
+        config.url += '&v=' + +new Date();
+      } else {
+        config.url += '?v=' + +new Date();
+      }
       if (!config.hideLoading) {
         dispatch(showLoading());
       }
@@ -39,7 +45,7 @@ const restAPI = {
         if (error.response.config.hideError) {
           console.log('hide loading');
         }
-        if (error.response.status === 403) {
+        if (error.response.status === 401) {
           history.push('/login');
         } else if (!error.response.config.hideError) {
           dialogHandler.show({

@@ -85,7 +85,7 @@ api.use((req, res, next) => {
   if (notNeedCertification(req)) {
     next();
   } else if (!req.session.isLogined) {
-    res.status(403).json({});
+    res.status(401).send(null);
   } else {
     next();
   }

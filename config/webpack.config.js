@@ -82,10 +82,10 @@ const common = {
   },
 };
 
-if (process.env.npm_lifecycle_event=== 'start') {
+if (process.env.npm_lifecycle_event === 'start') {
   module.exports = merge(common, devConfig);
 }
 
-if (process.env.npm_lifecycle_event=== 'build') {
+if (process.env.npm_lifecycle_event === 'build') {
   module.exports = merge(common, prodConfig);
 }

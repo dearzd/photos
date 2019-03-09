@@ -15,6 +15,7 @@ module.exports = {
   ],
   devServer: {
     hot: true,
+    inline: true,
     compress: true,
     proxy: {
       '/': 'http://localhost:3000'
