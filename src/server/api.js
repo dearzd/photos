@@ -61,7 +61,7 @@ const profileUpload = multer({
     filename: (req, file, cb) => {
       let originalName = file.originalname;
       let extName = path.extname(originalName);
-      let name = req.url === '/changeAvatar' ? 'avatar' : 'bg';
+      let name = ~req.url.indexOf('/changeAvatar') ? 'avatar' : 'bg';
       cb(null, name + extName);
     }
   })
@@ -71,9 +71,9 @@ let api = express.Router();
 
 function notNeedCertification(req) {
   if (req.method === 'GET') {
-    return req.url === '/userProfile' || req.url === '/settings';
+    return ~req.url.indexOf('/userProfile') || ~req.url.indexOf('/settings');
   } else {
-    return req.url === '/login' || req.url === '/logout' || req.url === '/changePassword';
+    return ~req.url.indexOf('/login') || ~req.url.indexOf('/logout')|| ~req.url.indexOf('/changePassword');
   }
 }
 
