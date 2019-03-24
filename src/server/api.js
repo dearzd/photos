@@ -448,7 +448,7 @@ api.put('/albums/:id/cover', (req, res) => {
 });
 
 /* upload photo */
-api.post('/uploadPhoto/:id', upload.single('photo'), (req, res) => {
+api.post('/upload-photos/:id', upload.single('photo'), (req, res) => {
 	let albumId = req.params.id;
 	let file = req.file;
 
@@ -572,7 +572,7 @@ api.post('/uploadPhoto/:id', upload.single('photo'), (req, res) => {
 		.catch(rollBack);
 });
 
-api.post('/deletePhotos/:id', (req, res) => {
+api.post('/delete-photos/:id', (req, res) => {
 	let albumId = req.params.id;
 	let names = req.body;
 

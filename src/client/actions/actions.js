@@ -78,7 +78,7 @@ export const uploadPhotos = (id, files, onUploadProgress, onSuccess, onFailed) =
 				hideError: true
 			};
 
-			return restAPI.post('/uploadPhoto/' + id, formData, config).then((res) => {
+			return restAPI.post('/upload-photos/' + id, formData, config).then((res) => {
 				succeeded.push(res.data);
 				onSuccess(index);
 			}, () => {
@@ -119,7 +119,7 @@ export const uploadPhotos = (id, files, onUploadProgress, onSuccess, onFailed) =
 
 export const deletePhotos = (id, names) => {
 	return (dispatch) => {
-		return restAPI.post('/deletePhotos/' + id, names).then(() => {
+		return restAPI.post('/delete-photos/' + id, names).then(() => {
 			dispatch({type: DELETE_PHOTOS_SUCCESS, payload: {albumId: id, names: names}});
 		});
 	};
