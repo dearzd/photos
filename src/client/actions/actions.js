@@ -18,26 +18,26 @@ export const fetchAlbums = () => {
 	};
 };
 
-export const fetchAlbum = (id) => {
-	return (dispatch) => {
-		return restAPI.get('/album/' + id).then((res) => {
-			dispatch({type: FETCH_ALBUM_DETAIL_SUCCESS, payload: res.data});
-		});
-	};
-};
-
 export const createAlbum = (albumName) => {
 	return (dispatch) => {
-		return restAPI.post('/album', {name: albumName}).then((res) => {
+		return restAPI.post('/albums', {name: albumName}).then((res) => {
 			dispatch({type: CREATE_ALBUM_SUCCESS, payload: res.data});
 			return res.data.id; // return id for redirect
 		});
 	};
 };
 
+export const fetchAlbum = (id) => {
+	return (dispatch) => {
+		return restAPI.get('/albums/' + id).then((res) => {
+			dispatch({type: FETCH_ALBUM_DETAIL_SUCCESS, payload: res.data});
+		});
+	};
+};
+
 export const changeAlbumName = (id, albumName) => {
 	return (dispatch) => {
-		return restAPI.put('/album/' + id, {name: albumName}).then(() => {
+		return restAPI.put('/albums/' + id, {name: albumName}).then(() => {
 			dispatch({type: CHANGE_ALBUM_NAME_SUCCESS, payload: {albumId: id, albumName: albumName}});
 		});
 	};
@@ -45,8 +45,16 @@ export const changeAlbumName = (id, albumName) => {
 
 export const deleteAlbum = (id) => {
 	return (dispatch) => {
-		return restAPI.delete('/album/' + id).then(() => {
+		return restAPI.delete('/albums/' + id).then(() => {
 			dispatch({type: DELETE_ALBUM_SUCCESS, payload: {albumId: id}});
+		});
+	};
+};
+
+export const setCover = (id, imgName) => {
+	return (dispatch) => {
+		return restAPI.put('/albums/' + id + '/cover', {name: imgName}).then(() => {
+			dispatch({type: SET_COVER_SUCCESS, payload: {albumId: id, imgName: imgName}});
 		});
 	};
 };
@@ -113,14 +121,6 @@ export const deletePhotos = (id, names) => {
 	return (dispatch) => {
 		return restAPI.post('/deletePhotos/' + id, names).then(() => {
 			dispatch({type: DELETE_PHOTOS_SUCCESS, payload: {albumId: id, names: names}});
-		});
-	};
-};
-
-export const setCover = (id, imgName) => {
-	return (dispatch) => {
-		return restAPI.put('/album/' + id + '/cover', {name: imgName}).then(() => {
-			dispatch({type: SET_COVER_SUCCESS, payload: {albumId: id, imgName: imgName}});
 		});
 	};
 };

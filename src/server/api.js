@@ -286,34 +286,8 @@ api.get('/albums', (req, res) => {
 	res.json(albumList);
 });
 
-api.get('/album/:id', (req, res) => {
-	let albumId = req.params.id;
-
-	// get album information
-	let albumList;
-	try {
-		albumList = db.getData('/albumList');
-	} catch (err) {
-		console.log(err);
-		res.status(500).json({errorText: 'database error.'});
-	}
-	let index = albumList.findIndex(info => info.id === albumId);
-	let albumInfo;
-	if (~index) {
-		albumInfo = albumList[index];
-	}
-
-	return res.json({
-		albumInfo: {
-			...albumInfo,
-			count: albumInfo.images.length
-		}
-	});
-
-});
-
 /* create album */
-api.post('/album', (req, res) => {
+api.post('/albums', (req, res) => {
 	let albumName = req.body.name;
 
 	// compute albumId
@@ -362,8 +336,34 @@ api.post('/album', (req, res) => {
 
 });
 
+api.get('/albums/:id', (req, res) => {
+	let albumId = req.params.id;
+
+	// get album information
+	let albumList;
+	try {
+		albumList = db.getData('/albumList');
+	} catch (err) {
+		console.log(err);
+		res.status(500).json({errorText: 'database error.'});
+	}
+	let index = albumList.findIndex(info => info.id === albumId);
+	let albumInfo;
+	if (~index) {
+		albumInfo = albumList[index];
+	}
+
+	return res.json({
+		albumInfo: {
+			...albumInfo,
+			count: albumInfo.images.length
+		}
+	});
+
+});
+
 /* change album name */
-api.put('/album/:id', (req, res) => {
+api.put('/albums/:id', (req, res) => {
 	let id = req.params.id;
 	let name = req.body.name;
 
@@ -386,7 +386,7 @@ api.put('/album/:id', (req, res) => {
 });
 
 /* delete album */
-api.delete('/album/:id', (req, res) => {
+api.delete('/albums/:id', (req, res) => {
 	let albumId = req.params.id;
 	let albumPath = path.resolve(paths.albumsFolder, albumId);
 
@@ -424,7 +424,7 @@ api.delete('/album/:id', (req, res) => {
 	return res.json({});
 });
 
-api.put('/album/:id/cover', (req, res) => {
+api.put('/albums/:id/cover', (req, res) => {
 	let albumId = req.params.id;
 	let imgName = req.body.name;
 	if (utils.isImg(imgName)) {
