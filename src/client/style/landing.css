@@ -1,125 +1,126 @@
 .landing {
-  background-color: #333;
-  background-position: center center;
-  background-size: cover;
-  overflow: auto;
+	background-color: #333;
+	background-position: center center;
+	background-size: cover;
+	overflow: auto;
 }
 
 .landing-wrapper {
-  background: rgba(0, 0, 0, 0.2);
+	background: rgba(0, 0, 0, 0.2);
 }
 
 .landing-body {
-  padding-bottom: 64px;
-  text-align: center;
-  color: #fff;
+	padding-bottom: 64px;
+	text-align: center;
+	color: #fff;
 }
 
 .account-actions {
-  text-align: left;
+	text-align: left;
 }
 
 h1.landing-title {
-  margin-top: 0;
-  margin-bottom: 48px;
-  line-height: 1;
+	margin-top: 0;
+	margin-bottom: 48px;
+	line-height: 1;
 }
 
 .account-actions div {
-  line-height: 3em;
-  cursor: pointer;
+	line-height: 3em;
+	cursor: pointer;
 }
 
 .account-actions div:hover {
-  color: rgba(255, 255, 255, 0.6);
+	color: rgba(255, 255, 255, 0.6);
 }
 
 /* input */
 .landing .input-wrapper {
-  width: 288px;
-  height: 32px;
-  margin-bottom: 12px;
-  outline: 2px solid rgba(255, 255, 255, 0.4);
+	width: 288px;
+	height: 32px;
+	margin-bottom: 12px;
+	outline: 2px solid rgba(255, 255, 255, 0.4);
 }
 
 .landing .input-wrapper:hover {
-  outline-color: #fff;
+	outline-color: #fff;
 }
 
 .landing .input-wrapper input {
-  border: 0;
+	border: 0;
 }
 
 .landing .confirm input {
-  width: calc(100% - 40px);
+	width: calc(100% - 40px);
 }
 
 .landing input:not(:focus) {
-  background: rgba(0, 0, 0, 0.1);
-  color: #fff;
+	background: rgba(0, 0, 0, 0.1);
+	color: #fff;
 }
 
 .landing input:not(:focus)::placeholder {
-  color: #fff;
-  opacity: 0.6;
+	color: #fff;
+	opacity: 0.6;
 }
 
 .landing input:not(:focus)::-ms-input-placeholder {
-  color: #fff;
-  opacity: 0.6;
+	color: #fff;
+	opacity: 0.6;
 }
 
 /* button */
 .landing .btn-landing {
-  background: rgba(255, 255, 255, 0.2);
-  color: #fff;
+	background: rgba(255, 255, 255, 0.2);
+	color: #fff;
 }
 
 .landing .btn-landing:hover,
 .landing .btn-landing:focus {
-  border-color: #fff;
+	border-color: #fff;
 }
 
 .landing .btn-landing:active {
-  border: rgba(255, 255, 255, 0.4);
-  background: rgba(255, 255, 255, 0.4);
+	border: rgba(255, 255, 255, 0.4);
+	background: rgba(255, 255, 255, 0.4);
 }
 
 .landing .btn-landing svg {
-  fill: #fff;
+	fill: #fff;
 }
 
 .landing-buttons .btn-landing {
-  margin-right: 8px;
+	margin-right: 8px;
 }
 
 .landing-buttons .btn-landing:last-child {
-  margin-right: 0;
+	margin-right: 0;
 }
 
 #btn-input-confirm {
-  vertical-align: top;
-  min-width: 0;
-  width: 40px;
-  margin: 0;
-  padding: 0;
+	vertical-align: top;
+	min-width: 0;
+	width: 40px;
+	margin: 0;
+	padding: 0;
 }
 
 #btn-input-confirm:hover {
-  border: none;
+	border: none;
 }
 
 .landing-buttons {
-  margin-top: 24px;
+	margin-top: 24px;
 }
+
 /* end button */
 
 .avatar {
-  width: 192px;
-  height: 192px;
-  margin: auto;
-  background-color: rgba(255, 255, 255, 0.2);
-  background-position: center center;
-  background-size: cover;
-  border-radius: 50%;
+	width: 192px;
+	height: 192px;
+	margin: auto;
+	background-color: rgba(255, 255, 255, 0.2);
+	background-position: center center;
+	background-size: cover;
+	border-radius: 50%;
 }

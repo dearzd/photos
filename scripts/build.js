@@ -8,24 +8,24 @@ const config = require('../config/webpack.config');
 build();
 
 function build() {
-  let compiler = webpack(config);
-  compiler.run((err, stats) => {
-    if (err) {
-      // todo, different with stats.errors
-      throw err;
-    }
+	let compiler = webpack(config);
+	compiler.run((err, stats) => {
+		if (err) {
+			// todo, different with stats.errors
+			throw err;
+		}
 
-    if (stats.hasErrors()) {
-      const messages = formatWebpackMessages(stats.toJson({}, true));
-      throw new Error(messages.errors.join('\n\n'));
-    }
+		if (stats.hasErrors()) {
+			const messages = formatWebpackMessages(stats.toJson({}, true));
+			throw new Error(messages.errors.join('\n\n'));
+		}
 
-    // treat warning error
-    if (stats.hasWarnings()) {
-      const messages = formatWebpackMessages(stats.toJson({}, true));
-      throw new Error(messages.warnings.join('\n\n'));
-    }
+		// treat warning error
+		if (stats.hasWarnings()) {
+			const messages = formatWebpackMessages(stats.toJson({}, true));
+			throw new Error(messages.warnings.join('\n\n'));
+		}
 
-    console.log('build successfully!');
-  });
+		console.log('build successfully!');
+	});
 }

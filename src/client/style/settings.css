@@ -1,24 +1,24 @@
 #settings {
-  color: #fff;
+	color: #fff;
 }
 
 .setting-body {
-  width: 80%;
-  max-width: 480px;
-  margin: auto;
+	width: 80%;
+	max-width: 480px;
+	margin: auto;
 }
 
 .setting-item {
-  padding: 24px 0;
-  border-bottom: 1px dashed rgba(255, 255, 255, 0.2);
-  text-align: left;
+	padding: 24px 0;
+	border-bottom: 1px dashed rgba(255, 255, 255, 0.2);
+	text-align: left;
 }
 
 .setting-toggle {
-  float: right;
-  margin-top: 2px;
+	float: right;
+	margin-top: 2px;
 }
 
 .white-list {
-  text-align: right;
+	text-align: right;
 }

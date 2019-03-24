@@ -1,21 +1,21 @@
 .checkbox {
-  display: inline-block;
-  padding: 8px;
+	display: inline-block;
+	padding: 8px;
 }
 
 .checkbox:hover .checkbox-view {
-  border-color: black;
+	border-color: black;
 }
 
 .checkbox.checked .checkbox-view {
-  border-color: var(--themeColor);
-  background: var(--themeColor);
+	border-color: var(--themeColor);
+	background: var(--themeColor);
 }
 
 .checkbox-view {
-  width: 16px;
-  height: 16px;
-  text-align: center;
-  border: 2px solid rgba(0, 0, 0, 0.4);
-  background: rgba(255, 255, 255, 0.4);
+	width: 16px;
+	height: 16px;
+	text-align: center;
+	border: 2px solid rgba(0, 0, 0, 0.4);
+	background: rgba(255, 255, 255, 0.4);
 }

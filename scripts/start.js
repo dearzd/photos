@@ -17,7 +17,7 @@ const host = 'localhost';
 const port = 9090;
 
 server.listen(port, host, () => {
-  console.log('Starting dev server on http://localhost:9090');
-  let url = protocol + '://' + host + ':' + port;
-  openBrowser(url);
+	console.log('Starting dev server on http://localhost:9090');
+	let url = protocol + '://' + host + ':' + port;
+	openBrowser(url);
 });

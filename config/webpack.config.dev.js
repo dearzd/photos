@@ -3,23 +3,23 @@ const paths = require('./paths');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  entry: [
-    require.resolve('react-dev-utils/webpackHotDevClient'),
-    paths.appEntryJS
-  ],
-  plugins: [
-    new HtmlWebpackPlugin({
-      template: paths.appHtml,
-      favicon: path.resolve(paths.appResources, 'favicon.png')
-    })
-  ],
-  devServer: {
-    hot: true,
-    inline: true,
-    compress: true,
-    proxy: {
-      '/': 'http://localhost:3000'
-    }
-  },
-  devtool: 'source-map'
+	entry: [
+		require.resolve('react-dev-utils/webpackHotDevClient'),
+		paths.appEntryJS
+	],
+	plugins: [
+		new HtmlWebpackPlugin({
+			template: paths.appHtml,
+			favicon: path.resolve(paths.appResources, 'favicon.png')
+		})
+	],
+	devServer: {
+		hot: true,
+		inline: true,
+		compress: true,
+		proxy: {
+			'/': 'http://localhost:3000'
+		}
+	},
+	devtool: 'source-map'
 };
