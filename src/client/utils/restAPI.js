@@ -22,9 +22,9 @@ const restAPI = {
 		axios.interceptors.request.use((config) => {
 			// add timestamp to api url for no cache
 			if (~config.url.indexOf('?')) {
-				config.url += '&v=' + +new Date();
+				config.url += '&timestamp=' + +new Date();
 			} else {
-				config.url += '?v=' + +new Date();
+				config.url += '?timestamp=' + +new Date();
 			}
 			if (!config.hideLoading) {
 				dispatch(showLoading());

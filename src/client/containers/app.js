@@ -34,7 +34,7 @@ class App extends Component {
 					<Route path="/" exact component={AlbumList}/>
 
 					{/* album detail page */}
-					<Route path="/album/:id" component={AlbumDetail}/>
+					<Route path="/albums/:id" component={AlbumDetail}/>
 
 					{/* upload photo page */}
 					<Route path="/uploadPhoto/:id" component={UploadPhoto}/>
