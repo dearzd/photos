@@ -1,9 +1,4 @@
-:root {
-	--themeColor: #0078D7;
-	--normalFontSize: 14px;
-	--smallFontSize: 12px;
-	--titleFontSize: 28px;
-}
+@import './vars.css';
 
 body {
 	margin: 0;

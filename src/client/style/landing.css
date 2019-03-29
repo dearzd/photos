@@ -64,11 +64,6 @@ h1.landing-title {
 	opacity: 0.6;
 }
 
-.landing input:not(:focus)::-ms-input-placeholder {
-	color: #fff;
-	opacity: 0.6;
-}
-
 /* button */
 .landing .btn-landing {
 	background: rgba(255, 255, 255, 0.2);

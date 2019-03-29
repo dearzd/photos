@@ -17,11 +17,7 @@ const common = {
 			{
 				test: /\.(js|jsx)$/,
 				include: paths.appClient,
-				loader: 'babel-loader',
-				options: {
-					presets: ['react']
-					//plugins: ['transform-object-rest-spread']
-				}
+				loader: 'babel-loader'
 			},
 			{
 				test: /\.css$/,
@@ -30,9 +26,10 @@ const common = {
 					{
 						loader: 'css-loader',
 						options: {
-							minimize: true
+							importLoaders: 1
 						}
-					}
+					},
+					'postcss-loader'
 				]
 			},
 			{
