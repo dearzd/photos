@@ -19,7 +19,7 @@ const paths = {
 };
 
 const common = {
-	mode: process.env.NODE_ENV,
+	entry: paths.appEntryJS,
 	output: {
 		path: path.resolve(paths.appBuild, 'static'),
 		publicPath: '/',
@@ -78,6 +78,7 @@ const common = {
 			filename: 'style.css'
 		})
 	],
+	devtool: 'source-map',
 	resolve: {
 		extensions: ['.js', '.css', '.svg'],
 		alias: {
@@ -94,10 +95,7 @@ const common = {
 
 if (process.env.npm_lifecycle_event === 'start') {
 	module.exports = merge(common, {
-		entry: [
-			require.resolve('react-dev-utils/webpackHotDevClient'),
-			paths.appEntryJS
-		],
+		mode: 'development',
 		plugins: [
 			new HtmlWebpackPlugin({
 				template: paths.appHtml,
@@ -114,14 +112,13 @@ if (process.env.npm_lifecycle_event === 'start') {
 			proxy: {
 				'/': 'http://localhost:3000'
 			}
-		},
-		devtool: 'source-map'
+		}
 	});
 }
 
 if (process.env.npm_lifecycle_event === 'build') {
 	module.exports = merge(common, {
-		entry: paths.appEntryJS,
+		mode: 'production',
 		performance: {
 			maxEntrypointSize: 1024 * 1024,
 			maxAssetSize: 1024 * 1024
@@ -148,11 +145,11 @@ if (process.env.npm_lifecycle_event === 'build') {
 				from: paths.appServer,
 				to: path.resolve(paths.appBuild, 'server')
 			}, {
-				from: path.resolve(__dirname, '../package.json'),
+				from: path.resolve(__dirname, './package.json'),
 				to: path.resolve(paths.appBuild)
 			}]),
 			new SVGTemplatePlugin({
-				template: path.resolve(__dirname, '../plugins/iconsTemplate.html'),
+				template: path.resolve(__dirname, './plugins/iconsTemplate.html'),
 				iconsFolder: path.resolve(paths.appResources, 'icons'),
 				filename: 'icons.html'
 			})
