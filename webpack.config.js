@@ -14,7 +14,7 @@ const paths = {
 	appClient: resolveApp('src/client'),
 	appServer: resolveApp('src/server'),
 	appResources: resolveApp('src/client/resources'),
-	appHtml: resolveApp('src/client/index.html'),
+	appHtml: resolveApp('src/client/resources/index.html'),
 	appEntryJS: resolveApp('src/client/entry.js')
 };
 
@@ -28,7 +28,7 @@ const common = {
 	module: {
 		rules: [
 			{
-				test: /\.(js|jsx)$/,
+				test: /\.js$/,
 				include: paths.appClient,
 				loader: 'babel-loader'
 			},
@@ -126,7 +126,7 @@ if (process.env.npm_lifecycle_event === 'build') {
 		module: {
 			rules: [
 				{
-					test: /\.(js|jsx)$/,
+					test: /\.js$/,
 					include: paths.appClient,
 					loader: 'eslint-loader',
 				}
