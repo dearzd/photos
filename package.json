@@ -6,7 +6,6 @@
 	"scripts": {
 		"start": "webpack-dev-server",
 		"build": "webpack",
-		"server": "node server/server.js",
 		"analyze": "source-map-explorer dist/static/photos.js"
 	},
 	"author": "1147433303@qq.com",
