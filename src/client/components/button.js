@@ -3,10 +3,6 @@ import PropTypes from 'prop-types';
 import Icon from './icon';
 
 class Button extends Component {
-	constructor(props) {
-		super(props);
-	}
-
 	render() {
 		const {type, id, text, icon, onClick, onChange, className, disabled, autoFocus, multiple} = this.props;
 		let classNames = ['btn'];

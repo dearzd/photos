@@ -8,7 +8,7 @@ module.exports = {
 					version: 3,
 					proposals: false /* EcmaScript proposals, default is false */
 				},
-				debug: true,
+				debug: false,
 			}
 		],
 		'@babel/preset-react'
