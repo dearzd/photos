@@ -211,7 +211,7 @@ api.put('/changeAvatar', profileUpload.single('avatar'), (req, res) => {
 				// create thumb
 				avatarName = utils.getBaseName(file.filename) + '.jpg';
 				let size = sizeOf(file.path);
-				let toHeight = Math.min(size.height, thumbHeight);
+				let toHeight = Math.min(size.height, 256);
 				let toWidth = size.width / size.height * toHeight;
 				let bgThumbPath = path.resolve(paths.uploadFolder, avatarName);
 				let readStream = fs.createReadStream(file.path);
@@ -311,8 +311,8 @@ api.post('/albums', (req, res) => {
 		}
 
 		// create thumb folder
-		let thumbFolderPath = path.resolve(albumPath, 'thumb');
-		fs.mkdirSync(thumbFolderPath); // todo, error handler
+		/*let thumbFolderPath = path.resolve(albumPath, 'thumb');
+		fs.mkdirSync(thumbFolderPath); // todo, error handler*/
 
 		// create large folder
 		let largeFolderPath = path.resolve(albumPath, 'large');
@@ -449,23 +449,25 @@ api.put('/albums/:id/cover', (req, res) => {
 
 /* upload photo */
 api.post('/upload-photos/:id', upload.single('photo'), (req, res) => {
-	let albumId = req.params.id;
-	let file = req.file;
+	const albumId = req.params.id;
+	const file = req.file;
+	const saveLarge = req.body.saveLarge !== 'false';
 
 	// todo, when filFilter return false.
 
 	// file information
-	let size = sizeOf(file.path);
+	const originalSize = sizeOf(file.path);
 	let photoInfo = {
 		name: file.filename,
-		size: [size.width, size.height], // todo, save cropped size
-		date: fs.statSync(file.path).birthtimeMs
+		size: [originalSize.width, originalSize.height],
+		date: fs.statSync(file.path).birthtimeMs,
+		hasLarge: false
 	};
 
 	// create album for photo
-	let createAlbum = function () {
-		let toHeight = Math.min(size.height, thumbHeight);
-		let toWidth = size.width / size.height * toHeight;
+	/*let createThumb = function () {
+		let toHeight = Math.min(originalSize.height, thumbHeight);
+		let toWidth = originalSize.width / originalSize.height * toHeight;
 		let thumbImgPath = utils.getThumbPath(albumId, file.filename);
 		return new Promise((resolve, reject) => {
 			gm(file.path)
@@ -478,24 +480,25 @@ api.post('/upload-photos/:id', upload.single('photo'), (req, res) => {
 					resolve();
 				});
 		});
-	};
+	};*/
 
 	// crop photo to small size when if necessary
 	let cropPhoto = function () {
-		let maxWidth = 1500;
-		let maxHeight = 1000;
+		let maxWidth = 700;
+		let maxHeight = 700;
 		let photoPath = utils.getPhotoPath(albumId, file.filename);
 		return new Promise((resolve, reject) => {
-			if (size.width > maxWidth || size.height > maxHeight) {
-				let toWidth, toHeight;
-				let proportion = size.width / size.height;
+			if (originalSize.width > maxWidth || originalSize.height > maxHeight) {
+				let toWidth = null, toHeight = null;
+				let proportion = originalSize.width / originalSize.height;
 				if (proportion < maxWidth / maxHeight) {
 					toHeight = maxHeight;
-					toWidth = proportion * toHeight;
+					photoInfo.size = [Math.round(proportion * toHeight), toHeight];
 				} else {
 					toWidth = maxWidth;
-					toHeight = size.height / size.width * toWidth;
+					photoInfo.size = [toWidth, Math.round(originalSize.height / originalSize.width * toWidth)];
 				}
+				photoInfo.hasLarge = true;
 
 				// save cropped photo
 				gm(file.path)
@@ -505,12 +508,14 @@ api.post('/upload-photos/:id', upload.single('photo'), (req, res) => {
 							console.log(err);
 							reject(err);
 						}
-						// delete large photo, todo
-						// fs.unlinkSync(file.path);
+						if (!saveLarge) {
+							fs.unlinkSync(file.path);
+						}
 						resolve();
 					});
 			} else {
-				fs.copyFile(file.path, photoPath, resolve);
+				fs.renameSync(file.path, photoPath);
+				resolve();
 			}
 		});
 	};
@@ -550,9 +555,9 @@ api.post('/upload-photos/:id', upload.single('photo'), (req, res) => {
 			fs.unlinkSync(file.path);
 		}
 		// delete thumb
-		if (fs.existsSync(utils.getThumbPath(albumId, file.filename))) {
+		/*if (fs.existsSync(utils.getThumbPath(albumId, file.filename))) {
 			fs.unlinkSync(utils.getThumbPath(albumId, file.filename));
-		}
+		}*/
 		// delete cropped photo
 		let croppedPath = path.resolve(paths.albumsFolder, albumId, file.filename);
 		if (fs.existsSync(croppedPath)) {
@@ -562,8 +567,7 @@ api.post('/upload-photos/:id', upload.single('photo'), (req, res) => {
 	};
 
 	// do all
-	createAlbum()
-		.then(cropPhoto)
+	cropPhoto()
 		.then(updateDB)
 		.then((photoInfo) => {
 			// all operation success
@@ -611,14 +615,14 @@ api.post('/delete-photos/:id', (req, res) => {
 		}
 
 		let photoPath = utils.getPhotoPath(albumId, photoName);
-		let thumbPath = utils.getThumbPath(albumId, photoName);
+		//let thumbPath = utils.getThumbPath(albumId, photoName);
 		let largePath = utils.getLargePath(albumId, photoName);
 		if (fs.existsSync(photoPath)) {
 			fs.unlinkSync(photoPath);
 		}
-		if (fs.existsSync(thumbPath)) {
+		/*if (fs.existsSync(thumbPath)) {
 			fs.unlinkSync(thumbPath);
-		}
+		}*/
 		if (fs.existsSync(largePath)) {
 			fs.unlinkSync(largePath);
 		}

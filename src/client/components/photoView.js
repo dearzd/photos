@@ -45,7 +45,7 @@ class PhotoView extends Component {
 
 	render() {
 		const {width, height, albumId, imgName} = this.props;
-		let photoUrl = commonUtil.getThumbUrl(albumId, imgName);
+		let photoUrl = commonUtil.getPhotoUrl(albumId, imgName);
 		let bg = 'url("' + photoUrl + '")';
 		return (
 			<div

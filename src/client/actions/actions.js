@@ -59,7 +59,7 @@ export const setCover = (id, imgName) => {
 	};
 };
 
-export const uploadPhotos = (id, files, onUploadProgress, onSuccess, onFailed) => {
+export const uploadPhotos = (id, files, saveLarge, onUploadProgress, onSuccess, onFailed) => {
 	return (dispatch) => {
 		let count = files.length;
 		let succeeded = [];
@@ -69,6 +69,7 @@ export const uploadPhotos = (id, files, onUploadProgress, onSuccess, onFailed) =
 			let file = files[index];
 			let formData = new FormData();
 			formData.append('photo', file);
+			formData.append('saveLarge', saveLarge);
 
 			let config = {
 				onUploadProgress: (progressEvent) => {

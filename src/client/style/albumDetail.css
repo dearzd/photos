@@ -56,7 +56,7 @@
 	}
 
 	& .photo-view:hover .img-checkbox,
-	& .select-mode .img-checkbox {
+	&.select-mode .img-checkbox {
 		display: block;
 	}
 

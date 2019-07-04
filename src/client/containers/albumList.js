@@ -37,7 +37,7 @@ class AlbumList extends Component {
 	handleConfirmCreate(name) {
 		if (name) {
 			this.props.createAlbum(name).then((id) => {
-				this.props.history.push('/album/' + id);
+				this.props.history.push('/albums/' + id);
 			});
 		} else {
 			dialogHandler.show({
@@ -72,7 +72,7 @@ class AlbumList extends Component {
 							albums.map((folderInfo, index) => {
 								let backgroundUrl = '';
 								if (folderInfo.cover) {
-									backgroundUrl += 'url("' + commonUtil.getThumbUrl(folderInfo.id, folderInfo.cover) + '")';
+									backgroundUrl += 'url("' + commonUtil.getPhotoUrl(folderInfo.id, folderInfo.cover) + '")';
 								}
 								return (
 									<Link className="album-wrap" key={index} to={'/albums/' + folderInfo.id}>

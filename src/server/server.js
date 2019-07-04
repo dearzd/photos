@@ -269,9 +269,9 @@ function checkLargePhoto() {
 		.then(checkAlbumList)
 		.then(checkUploadFolder)
 		.then(checkAlbumsFolder)
-		.then(checkPhotos)
-		.then(checkThumb)
-		.then(checkLargePhoto)
+		//.then(checkPhotos)
+		//.then(checkThumb)
+		//.then(checkLargePhoto)
 		.then(() => {
 			app.listen(port, () => {
 				console.log('NodeJS server on port %s', port);

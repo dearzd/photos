@@ -4,11 +4,11 @@
 # ignore install node modules
 node_modules/
 
-# ignore database file
+# ignore runtime file
+upload/
 db.json
 
 # ignore build files
 dist/
-upload/
 
 package-lock.json

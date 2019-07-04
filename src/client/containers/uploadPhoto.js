@@ -18,7 +18,8 @@ class UploadPhoto extends Component {
 			albumId: props.match.params.id,
 			selectedFiles: [],
 			percent: [],
-			completed: []
+			completed: [],
+			saveLarge: true
 		};
 
 		this.handlePhotoSelected = this.handlePhotoSelected.bind(this);
@@ -53,9 +54,9 @@ class UploadPhoto extends Component {
 
 	handleConfirm() {
 		const {uploadPhotos} = this.props;
-		const {albumId, selectedFiles} = this.state;
+		const {albumId, selectedFiles, saveLarge} = this.state;
 
-		uploadPhotos(albumId, selectedFiles, this.onUploadProgress, this.onSuccess, this.onFailed).then(() => {
+		uploadPhotos(albumId, selectedFiles, saveLarge, this.onUploadProgress, this.onSuccess, this.onFailed).then(() => {
 			const {completed} = this.state;
 			let failedCount = completed.filter(item => item === false).length;
 			dialogHandler.show({
@@ -111,7 +112,7 @@ class UploadPhoto extends Component {
 
 	render() {
 		const {history} = this.props;
-		const {selectedFiles, percent} = this.state;
+		const {selectedFiles, percent, saveLarge} = this.state;
 		let toolButtons = [{
 			icon: 'ok',
 			text: 'Upload',
@@ -128,8 +129,19 @@ class UploadPhoto extends Component {
 				<div>
 					<Toolbar buttons={toolButtons} history={history}/>
 					<div id="upload-photo" className="main">
-						<Button type="file" text="Select Photo" icon="add" className="upload-photo-button"
-										onChange={this.handlePhotoSelected} multiple={true}/>
+						<Button
+							type="file"
+							text="Select Photo"
+							icon="add"
+							className="upload-photo-button"
+							onChange={this.handlePhotoSelected} multiple={true}/>
+						<div>
+							<label><input type="checkbox" checked={saveLarge} onChange={(e) => {
+								this.setState({
+									saveLarge: e.target.checked
+								});
+							}} />Keep Large</label>
+						</div>
 						{
 							<div id="upload-preview">
 								{
