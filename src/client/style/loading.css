@@ -1,5 +1,3 @@
-@import './vars.css';
-
 #loading {
 	background: rgba(255, 255, 255, 0.8);
 	font-size: var(--titleFontSize);

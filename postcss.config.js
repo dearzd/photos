@@ -4,7 +4,9 @@ module.exports = {
 		'postcss-preset-env': {
 			features: {
 				'nesting-rules': true
-			}
-		}
+			},
+			importFrom: 'src/client/style/vars.css'
+		},
+		'cssnano': {}
 	}
 };

@@ -203,7 +203,6 @@ class AlbumDetail extends Component {
 		}
 	}
 
-
 	getSelectedNames() {
 		const {selectedIndex} = this.state;
 		let images = AlbumDetail.getCurrentAlbum(this.props, this.state).images;

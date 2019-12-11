@@ -4,7 +4,6 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const SVGTemplatePlugin = require('./plugins/svg-template-plugin');
-const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 function resolveApp(dir) {
 	return path.resolve(__dirname, dir);
@@ -77,15 +76,6 @@ const common = {
 	plugins: [
 		new MiniCssExtractPlugin({
 			filename: 'style.css'
-		}),
-		new OptimizeCssAssetsPlugin({
-			cssProcessor: require('cssnano'),
-			cssProcessorOptions: {
-				map: {
-					inline: false,
-					annotation: true
-				}
-			}
 		})
 	],
 	devtool: 'source-map',

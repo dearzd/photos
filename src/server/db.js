@@ -1,4 +1,4 @@
-const JsonDB = require('node-json-db');
+const {JsonDB} = require('node-json-db');
 const path = require('path');
 
 // simple database to store albums information

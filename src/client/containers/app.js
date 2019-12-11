@@ -12,6 +12,7 @@ import Settings from './settings';
 import Dialog from './dialog';
 import restAPI from 'utils/restAPI';
 import {getUserProfile, getSettings} from 'actions/appAction';
+import 'style/vars.css';
 import 'style/common.css';
 
 class App extends Component {
