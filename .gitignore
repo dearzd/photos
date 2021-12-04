@@ -10,5 +10,3 @@ db.json
 
 # ignore build files
 dist/
-
-package-lock.json
