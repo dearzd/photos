@@ -107,7 +107,7 @@ if (process.env.npm_lifecycle_event === 'start') {
 			inline: true,
 			compress: false,
 			open: true,
-			port: 9090,
+			port: 9091,
 			publicPath: '/',
 			proxy: {
 				'/': 'http://localhost:3000'

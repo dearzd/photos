@@ -63,7 +63,7 @@ app.use((req, res, next) => {
 	}
 });
 app.use(express.static(paths.webHome)); // static, html, js, css, favicon.icon, and images
-app.use(express.static(paths.uploadFolder));
+app.use(express.static(paths.uploadFolder, { maxAge: 2592000 * 1000 }));
 app.use(sitePages, (req, res) => {
 	res.type('html').send(utils.getHomePage());
 });
