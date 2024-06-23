@@ -460,8 +460,7 @@ api.post('/upload-photos/:id', upload.single('photo'), (req, res) => {
 	let photoInfo = {
 		name: file.filename,
 		size: [originalSize.width, originalSize.height],
-		date: fs.statSync(file.path).birthtimeMs,
-		hasLarge: false
+		date: fs.statSync(file.path).birthtimeMs
 	};
 
 	// create album for photo
@@ -482,22 +481,33 @@ api.post('/upload-photos/:id', upload.single('photo'), (req, res) => {
 		});
 	};*/
 
+	function needCrop(size, toSize) {
+		return size.width > toSize && size.height > toSize;
+	}
+
+	function getToWidthHeight(size, toSize) {
+		let toWidth = null;
+		let toHeight = null;
+		let newSize = null;
+		let proportion = size.width / size.height;
+		if (proportion < 1) {
+			toWidth = toSize;
+			newSize = [toWidth, Math.round(size.height / size.width * toWidth)];
+		} else {
+			toHeight = toSize;
+			newSize = [Math.round(proportion * toHeight), toHeight];
+		}
+		return { toWidth, toHeight, newSize };
+	}
+
 	// crop photo to small size when if necessary
 	let cropPhoto = function () {
-		let maxWidth = 700;
-		let maxHeight = 700;
+		const toSize = 1080;
 		let photoPath = utils.getPhotoPath(albumId, file.filename);
 		return new Promise((resolve, reject) => {
-			if (originalSize.width > maxWidth || originalSize.height > maxHeight) {
-				let toWidth = null, toHeight = null;
-				let proportion = originalSize.width / originalSize.height;
-				if (proportion < maxWidth / maxHeight) {
-					toHeight = maxHeight;
-					photoInfo.size = [Math.round(proportion * toHeight), toHeight];
-				} else {
-					toWidth = maxWidth;
-					photoInfo.size = [toWidth, Math.round(originalSize.height / originalSize.width * toWidth)];
-				}
+			if (needCrop(originalSize, toSize)) {
+				const { toWidth, toHeight, newSize } = getToWidthHeight(originalSize, toSize);
+				photoInfo.size = newSize;
 				photoInfo.hasLarge = true;
 
 				// save cropped photo

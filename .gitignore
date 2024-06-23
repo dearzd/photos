@@ -10,3 +10,4 @@ db.json
 
 # ignore build files
 dist/
+test/
